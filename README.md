@@ -14,4 +14,5 @@ qmake
 make  
 
 ## Create documentation
-
+doxygen -g  
+doxygen  
