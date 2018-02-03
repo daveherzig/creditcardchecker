@@ -3,15 +3,15 @@ This is a simple QT project to validate a credit card number. This project conta
 It corrently works for credit card numbers which are 16 digits long.
 
 ## Architecture
-The software is based on the model-view-controller principles:
-model: CreditCard
-view: MainWidget
-controller: EventHandler
+The software is based on the model-view-controller principles:  
+model: CreditCard  
+view: MainWidget  
+controller: EventHandler  
 
 ## Build the project
-qmake -project QT+=widgets
-qmake
-make
+qmake -project QT+=widgets  
+qmake  
+make  
 
 ## Create documentation
 
