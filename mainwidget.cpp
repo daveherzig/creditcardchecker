@@ -87,9 +87,14 @@ void MainWidget::onResultUpdate(CreditCard &obj)
 void MainWidget::createLayout()
 {
     QPixmap icon("../CreditCard/img/creditcards.png");
+    QLabel *iconLabel;
+    if (icon.isNull()) {
+        iconLabel = new QLabel("icon not found!");
+    } else {
+        iconLabel = new QLabel();
+        iconLabel->setPixmap(icon.scaledToHeight(100));
+    }
     QLabel *titleLabel = new QLabel("<H1>Credit Card Checker</H1>");
-    QLabel *titleIcon = new QLabel();
-    titleIcon->setPixmap(icon.scaledToHeight(100));
 
     block1Input = new QLineEdit();
     block2Input = new QLineEdit();
@@ -110,7 +115,7 @@ void MainWidget::createLayout()
     // create layout
     QGridLayout *layout = new QGridLayout();
     layout->addWidget(titleLabel, 0, 0, 1, 3);
-    layout->addWidget(titleIcon, 0, 3);
+    layout->addWidget(iconLabel, 0, 3);
     layout->addWidget(block1Input, 1, 0);
     layout->addWidget(block2Input, 1, 1);
     layout->addWidget(block3Input, 1, 2);
