@@ -45,12 +45,10 @@ MainWidget::~MainWidget() {
 
 QString MainWidget::getCreditCardNumber()
 {
-    QString result =
-            block1Input->text() +
-            block2Input->text() +
-            block3Input->text() +
-            block4Input->text();
-    return result;
+    QString result("");
+    for (int i=0; i<4; i++) {
+        result += blockInput[i]->text();
+    }    return result;
 }
 
 void MainWidget::getData(CreditCard & obj)
@@ -86,7 +84,7 @@ void MainWidget::onResultUpdate(CreditCard &obj)
 
 void MainWidget::createLayout()
 {
-    QPixmap icon("../CreditCard/img/creditcards.png");
+    QPixmap icon("creditcards.png");
     QLabel *iconLabel;
     if (icon.isNull()) {
         iconLabel = new QLabel("icon not found!");
@@ -96,19 +94,16 @@ void MainWidget::createLayout()
     }
     QLabel *titleLabel = new QLabel("<H1>Credit Card Checker</H1>");
 
-    block1Input = new QLineEdit();
-    block2Input = new QLineEdit();
-    block3Input = new QLineEdit();
-    block4Input = new QLineEdit();
-
-    block1Input->setMaxLength(4);
-    block2Input->setMaxLength(4);
-    block3Input->setMaxLength(4);
-    block4Input->setMaxLength(4);
+    blockInput = new QLineEdit*[4];
+    for (int i=0; i<4; i++) {
+        blockInput[i] = new QLineEdit();
+        blockInput[i]->setMaxLength(4);
+    }
 
     monthBox = new QComboBox();
     yearBox = new QComboBox();
     checkButton = new QPushButton("Check");
+    clearButton = new QPushButton("Clear");
 
     this->setDefaultValues();
 
@@ -116,15 +111,15 @@ void MainWidget::createLayout()
     QGridLayout *layout = new QGridLayout();
     layout->addWidget(titleLabel, 0, 0, 1, 3);
     layout->addWidget(iconLabel, 0, 3);
-    layout->addWidget(block1Input, 1, 0);
-    layout->addWidget(block2Input, 1, 1);
-    layout->addWidget(block3Input, 1, 2);
-    layout->addWidget(block4Input, 1, 3);
+    for (int i=0; i<4; i++) {
+        layout->addWidget(blockInput[i], 1, i);
+    }
     layout->addWidget(new QLabel("Month"), 2, 0);
     layout->addWidget(monthBox, 2, 1);
     layout->addWidget(new QLabel("Year"), 2, 2);
     layout->addWidget(yearBox, 2, 3);
-    layout->addWidget(checkButton, 3, 0, 1, 4);
+    layout->addWidget(checkButton, 3, 0, 1, 2);
+    layout->addWidget(clearButton, 3, 2, 1, 2);
 
     // set layout
     this->setLayout(layout);
@@ -146,10 +141,9 @@ void MainWidget::setDefaultValues()
         yearBox->addItem(year);
     }
 
-    block1Input->setPlaceholderText("1234");
-    block2Input->setPlaceholderText("5678");
-    block3Input->setPlaceholderText("9101");
-    block4Input->setPlaceholderText("1121");
+    for (int i=0; i<4; i++) {
+        blockInput[i]->setPlaceholderText("1234");
+    }
 }
 
 void MainWidget::setupEventHandling()
@@ -167,4 +161,9 @@ void MainWidget::setupEventHandling()
         handler, SIGNAL(updateResult(CreditCard&)),
         this, SLOT(onResultUpdate(CreditCard&))
     );
+    for (int i=0; i<4; i++) {
+        QObject::connect(
+            clearButton, SIGNAL(clicked()),
+            blockInput[i], SLOT(clear()));
+    }
 }

@@ -50,12 +50,10 @@ private:
     QComboBox *monthBox;
     QComboBox *yearBox;
 
-    QLineEdit *block1Input;
-    QLineEdit *block2Input;
-    QLineEdit *block3Input;
-    QLineEdit *block4Input;
+    QLineEdit **blockInput;
 
     QPushButton *checkButton;
+    QPushButton *clearButton;
 };
 
 #endif // MAINWIDGET_H
