@@ -38,6 +38,7 @@ public:
 public slots:
     void getData(CreditCard & obj);
     void onResultUpdate(CreditCard &obj);
+    void clear();
 
 private:
     MainWidget(const MainWidget & obj);

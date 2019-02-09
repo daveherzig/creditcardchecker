@@ -51,6 +51,13 @@ QString MainWidget::getCreditCardNumber()
     }    return result;
 }
 
+void MainWidget::clear()
+{
+    for (int i=0; i<4; i++) {
+        blockInput[i]->clear();
+    }
+}
+
 void MainWidget::getData(CreditCard & obj)
 {
     qDebug() << "copy gui data into model";
@@ -161,9 +168,7 @@ void MainWidget::setupEventHandling()
         handler, SIGNAL(updateResult(CreditCard&)),
         this, SLOT(onResultUpdate(CreditCard&))
     );
-    for (int i=0; i<4; i++) {
-        QObject::connect(
-            clearButton, SIGNAL(clicked()),
-            blockInput[i], SLOT(clear()));
-    }
+    QObject::connect(
+        clearButton, SIGNAL(clicked()),
+        this, SLOT(clear()));
 }

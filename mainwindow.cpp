@@ -19,10 +19,44 @@
 
 #include "mainwidget.h"
 
+#include <QApplication>
+#include <QCoreApplication>
+#include <QMenuBar>
+#include <QMenu>
+#include <QAction>
+
 MainWindow::MainWindow()
 {
     mainWidget = new MainWidget();
     this->setCentralWidget(mainWidget);
+
+    QMenuBar *menuBar = this->menuBar();
+
+    QMenu *fileMenu = new QMenu("File");
+    QMenu *aboutMenu = new QMenu("About");
+
+    QAction *clearAction = fileMenu->addAction("Clear");
+
+    QObject::connect(
+        clearAction, SIGNAL(triggered()),
+        mainWidget, SLOT(clear()));
+
+    fileMenu->addSeparator();
+    QAction *exitAction = fileMenu->addAction("Exit");
+
+    QObject::connect(
+        exitAction, SIGNAL(triggered()),
+        QCoreApplication::instance(), SLOT(quit()));
+
+    menuBar->addMenu(fileMenu);
+
+    QAction *aboutQTAction = aboutMenu->addAction("About QT");
+
+    QObject::connect(
+        aboutQTAction, SIGNAL(triggered()),
+        QApplication::instance(), SLOT(aboutQt()));
+
+    menuBar->addMenu(aboutMenu);
 }
 
 MainWindow::~MainWindow()

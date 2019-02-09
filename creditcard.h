@@ -48,8 +48,6 @@ public:
     void setType(const QString &value);
     int getValidationStatus() const;
     void setValidationStatus(int value);
-
-    void validate();
 };
 
 #endif // MODEL_H
