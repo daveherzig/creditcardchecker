@@ -47,13 +47,32 @@ void CreditCard::setValidationStatus(int value)
     validationStatus = value;
 }
 
-void CreditCard::setNumber(QString value)
+CreditCard::CreditCard()
 {
-    number = value;
+    number = new QString[4];
 }
 
-QString CreditCard::getNumber()
+CreditCard::~CreditCard()
 {
-    return number;
+    delete [] number;
+}
+
+QString CreditCard::getCompleteNumber()
+{
+    QString result("");
+    for (int i=0; i<4; i++) {
+        result += number[i];
+    }
+    return result;
+}
+
+void CreditCard::setNumber(QString value, int index)
+{
+    number[index] = value;
+}
+
+QString CreditCard::getNumber(int index)
+{
+    return number[index];
 }
 

@@ -36,9 +36,12 @@ Q_OBJECT
 
 public slots:
     void onCheckButtonClicked();
+    void save();
+    void load();
 
 signals:
     void retreiveGuiData(CreditCard & obj);
+    void pushGuiData(CreditCard & obj);
     void updateResult(CreditCard & obj);
 };
 

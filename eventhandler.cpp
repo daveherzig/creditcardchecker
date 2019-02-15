@@ -18,6 +18,7 @@
 #include "eventhandler.h"
 
 #include <QDebug>
+#include <QFileDialog>
 
 #include "mainwidget.h"
 #include "util.h"
@@ -25,15 +26,36 @@
 void EventHandler::onCheckButtonClicked()
 {
     // retrieve input data
-    qDebug() << "check button has been clicked. retrieve data from gui";
+    qDebug() << "EventHandler::onCheckButtonClicked";
     CreditCard cc;
-    qDebug() << "model address: " << &cc;
     emit retreiveGuiData(cc);
-    qDebug() << cc.getNumber() << " " << cc.getMonth() << " " << cc.getYear();
 
     // calculate result
-    cc.setValidationStatus(Util::validateNumber(cc.getNumber()));
+    cc.setValidationStatus(Util::validateNumber(cc.getCompleteNumber()));
 
     // display result
     emit updateResult(cc);
+}
+
+void EventHandler::save()
+{
+    qDebug() << "EventHandler::save";
+    CreditCard cc;
+    emit retreiveGuiData(cc);
+    QString filename = QFileDialog::getSaveFileName();
+    if (!filename.isEmpty()) {
+        Util::saveData(&cc, filename);
+    }
+}
+
+void EventHandler::load()
+{
+    qDebug() << "EventHandler::load";
+    CreditCard cc;
+    QString filename = QFileDialog::getOpenFileName();
+    if (!filename.isEmpty()) {
+        Util::loadData(&cc, filename);
+        qDebug("fire event pushGuiData");
+        emit pushGuiData(cc);
+    }
 }

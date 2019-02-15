@@ -20,6 +20,8 @@
 
 #include <QString>
 
+class CreditCard;
+
 class Util
 {
 private:
@@ -38,6 +40,12 @@ public:
     const static int NOT_A_NUMBER = 4;
     const static int INVALID_NUMBER = 5;
 
+    const static QString XML_ROOT_KEY;
+    const static QString XML_NUMBER_KEY;
+    const static QString XML_BLOCK_KEY;
+    const static QString XML_MONTH_KEY;
+    const static QString XML_YEAR_KEY;
+
     /*!
      * \brief Implementation of the Luhn algorithmus to check wether a credit card
      * number is valid or not.
@@ -46,6 +54,9 @@ public:
      * as constant static variables in this class.
      */
     static int validateNumber(QString number);
+
+    static void saveData(CreditCard *c, QString filename);
+    static void loadData(CreditCard *c, QString filename);
 };
 
 #endif // UTIL_H

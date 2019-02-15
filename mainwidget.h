@@ -26,6 +26,8 @@ class QComboBox;
 class QLineEdit;
 class QPushButton;
 
+class EventHandler;
+
 class MainWidget : public QWidget
 {
     Q_OBJECT
@@ -33,10 +35,11 @@ class MainWidget : public QWidget
 public:
     MainWidget();
     ~MainWidget();
-    QString getCreditCardNumber();
+    EventHandler *getEventHandler();
 
 public slots:
-    void getData(CreditCard & obj);
+    void guiToModel(CreditCard & obj);
+    void modelToGui(CreditCard & obj);
     void onResultUpdate(CreditCard &obj);
     void clear();
 
@@ -55,6 +58,8 @@ private:
 
     QPushButton *checkButton;
     QPushButton *clearButton;
+
+    EventHandler *eventHandler;
 };
 
 #endif // MAINWIDGET_H

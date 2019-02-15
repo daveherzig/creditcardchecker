@@ -33,6 +33,8 @@ private:
 public:
     MainWindow();
     ~MainWindow();
+
+    void setupMenuStructure();
 };
 
 #endif // MAINWINDOW_H

@@ -16,8 +16,8 @@
  */
 
 #include "mainwindow.h"
-
 #include "mainwidget.h"
+#include "eventhandler.h"
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -29,10 +29,19 @@ MainWindow::MainWindow()
 {
     mainWidget = new MainWidget();
     this->setCentralWidget(mainWidget);
+    this->setupMenuStructure();
+}
 
+MainWindow::~MainWindow()
+{
+    delete mainWidget;
+}
+
+void MainWindow::setupMenuStructure()
+{
     QMenuBar *menuBar = this->menuBar();
 
-    QMenu *fileMenu = new QMenu("File");
+    QMenu *fileMenu = new QMenu(tr("&File"));
     QMenu *aboutMenu = new QMenu("About");
 
     QAction *clearAction = fileMenu->addAction("Clear");
@@ -42,8 +51,20 @@ MainWindow::MainWindow()
         mainWidget, SLOT(clear()));
 
     fileMenu->addSeparator();
-    QAction *exitAction = fileMenu->addAction("Exit");
 
+    QAction *loadAction = fileMenu->addAction("Load Model");
+    QObject::connect(
+        loadAction, SIGNAL(triggered()),
+        mainWidget->getEventHandler(), SLOT(load()));
+    QAction *saveAction = fileMenu->addAction("Save Model");
+    QObject::connect(
+        saveAction, SIGNAL(triggered()),
+        mainWidget->getEventHandler(), SLOT(save()));
+
+
+    fileMenu->addSeparator();
+
+    QAction *exitAction = fileMenu->addAction("Exit");
     QObject::connect(
         exitAction, SIGNAL(triggered()),
         QCoreApplication::instance(), SLOT(quit()));
@@ -57,9 +78,4 @@ MainWindow::MainWindow()
         QApplication::instance(), SLOT(aboutQt()));
 
     menuBar->addMenu(aboutMenu);
-}
-
-MainWindow::~MainWindow()
-{
-    delete mainWidget;
 }

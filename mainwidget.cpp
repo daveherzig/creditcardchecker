@@ -27,12 +27,10 @@
 #include <QPixmap>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "eventhandler.h"
 #include "util.h"
-
-#include <string>
-using namespace std;
 
 MainWidget::MainWidget()
 {
@@ -43,12 +41,9 @@ MainWidget::MainWidget()
 MainWidget::~MainWidget() {
 }
 
-QString MainWidget::getCreditCardNumber()
+EventHandler *MainWidget::getEventHandler()
 {
-    QString result("");
-    for (int i=0; i<4; i++) {
-        result += blockInput[i]->text();
-    }    return result;
+    return eventHandler;
 }
 
 void MainWidget::clear()
@@ -56,15 +51,30 @@ void MainWidget::clear()
     for (int i=0; i<4; i++) {
         blockInput[i]->clear();
     }
+    yearBox->setCurrentIndex(0);
+    monthBox->setCurrentIndex(0);
 }
 
-void MainWidget::getData(CreditCard & obj)
+void MainWidget::guiToModel(CreditCard & obj)
 {
-    qDebug() << "copy gui data into model";
-    qDebug() << "model address: " << &obj;
-    obj.setNumber(getCreditCardNumber());
+    qDebug() << "MainWidget::guiToModel";
+    for (int i=0; i<4; i++) {
+        obj.setNumber(blockInput[i]->text(), i);
+    }
     obj.setMonth(monthBox->currentText());
     obj.setYear(yearBox->currentText().toInt());
+}
+
+void MainWidget::modelToGui(CreditCard & obj)
+{
+    qDebug() << "MainWidget::modelToGui";
+    for (int i=0; i<4; i++) {
+        blockInput[i]->setText(obj.getNumber(i));
+    }
+    int indexYear = yearBox->findText(QString::number(obj.getYear()));
+    int indexMonth = monthBox->findText(obj.getMonth());
+    yearBox->setCurrentIndex(indexYear);
+    monthBox->setCurrentIndex(indexMonth);
 }
 
 void MainWidget::onResultUpdate(CreditCard &obj)
@@ -155,17 +165,21 @@ void MainWidget::setDefaultValues()
 
 void MainWidget::setupEventHandling()
 {
-    EventHandler *handler = new EventHandler();
+    eventHandler = new EventHandler();
     QObject::connect(
         checkButton, SIGNAL(clicked()),
-        handler, SLOT(onCheckButtonClicked())
+        eventHandler, SLOT(onCheckButtonClicked())
     );
     QObject::connect(
-        handler, SIGNAL(retreiveGuiData(CreditCard&)),
-        this, SLOT(getData(CreditCard&))
+        eventHandler, SIGNAL(retreiveGuiData(CreditCard&)),
+        this, SLOT(guiToModel(CreditCard&))
     );
     QObject::connect(
-        handler, SIGNAL(updateResult(CreditCard&)),
+        eventHandler, SIGNAL(pushGuiData(CreditCard&)),
+        this, SLOT(modelToGui(CreditCard&))
+    );
+    QObject::connect(
+        eventHandler, SIGNAL(updateResult(CreditCard&)),
         this, SLOT(onResultUpdate(CreditCard&))
     );
     QObject::connect(

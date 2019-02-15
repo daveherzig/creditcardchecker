@@ -29,7 +29,7 @@ class CreditCard
 {
 private:
     // input values
-    QString number;
+    QString *number;
     QString month;
     int year;
 
@@ -38,8 +38,11 @@ private:
     QString type;
 
 public:
-    void setNumber(QString number);
-    QString getNumber();
+    CreditCard();
+    ~CreditCard();
+    void setNumber(QString number, int index);
+    QString getNumber(int index);
+    QString getCompleteNumber();
     QString getMonth() const;
     void setMonth(QString value);
     int getYear() const;
@@ -48,6 +51,11 @@ public:
     void setType(const QString &value);
     int getValidationStatus() const;
     void setValidationStatus(int value);
+
+private:
+    CreditCard(const CreditCard & obj);
+    CreditCard operator= (const CreditCard & obj);
+
 };
 
 #endif // MODEL_H
