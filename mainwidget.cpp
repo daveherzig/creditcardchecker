@@ -101,7 +101,7 @@ void MainWidget::onResultUpdate(CreditCard &obj)
 
 void MainWidget::createLayout()
 {
-    QPixmap icon("creditcards.png");
+    QPixmap icon(":/creditcard/creditcards.png");
     QLabel *iconLabel;
     if (icon.isNull()) {
         iconLabel = new QLabel("icon not found!");
